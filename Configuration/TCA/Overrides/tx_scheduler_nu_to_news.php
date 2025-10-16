@@ -15,7 +15,7 @@ if (isset($GLOBALS['TCA']['tx_scheduler_task'])) {
             'value' => NuToNews::class,
             'icon' => '',
             'iconOverlay' => '',
-            'group' => '',
+            'group' => 'blub',
         ],
         $GLOBALS['TCA']['tx_scheduler_task']['0']['showitem'],
         [],
