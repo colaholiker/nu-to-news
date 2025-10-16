@@ -1,0 +1,21 @@
+{
+    "name": "schachverein-balingen-ev/nu-to-news",
+    "description": "NuLiga Parser to tx_news",
+    "type": "typo3-cms-extension",
+    "license": [
+        "GPL-2.0-or-later"
+    ],
+    "require": {
+        "typo3/cms-core": "^13.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "SchachvereinBalingenEv\\NuToNews\\": "Classes/"
+        }
+    },
+    "extra": {
+        "typo3/cms": {
+            "extension-key": "nu_to_news"
+        }
+    }
+}
