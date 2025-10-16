@@ -16,7 +16,6 @@ final class NuToNews extends AbstractTask
     {
         # Dependency injection cannot be used in scheduler tasks
 
-	die('test')
     }
 
     public function getAdditionalInformation()
