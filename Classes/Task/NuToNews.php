@@ -7,6 +7,10 @@ namespace SchachvereinBalingenEv\NuToNews\Task;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Scheduler\Task\AbstractTask;
 
+
+use Bakame\TabularData\HtmlTable\Parser;
+use Bakame\TabularData\HtmlTable\Section;
+
 final class NuToNews extends AbstractTask
 {
     /**
@@ -16,12 +20,65 @@ final class NuToNews extends AbstractTask
     {
         # Dependency injection cannot be used in scheduler tasks
 
-		echo "test";
+
+
+
+
+$url = 'https://svw-schach.liga.nu/cgi-bin/WebObjects/nuLigaSCHACHDE.woa/wa/clubMeetings?club=12004';
+$data = ['searchType' => '1', 'searchTimeRangeFrom' => '01.01.2000', 'searchTimeRangeTo' => '31.12.2099', 'selectedTeamId' => 'WONoSelectionString', 'club' => '12004', 'searchMeetings' => 'Suchen'];
+
+// use key 'http' even if you send the request to https://...
+$options = [
+    'http' => [
+        'header' => "Content-type: application/x-www-form-urlencoded\r\n",
+        'method' => 'POST',
+        'content' => http_build_query($data),
+    ],
+];
+
+$context = stream_context_create($options);
+$result = file_get_contents($url, false, $context);
+if ($result === false) {
+    /* Handle error */
+}
+
+#var_dump($result);
+
+$formatter = fn (array $record): array => array_map( function($item) {
+        $item = mb_trim($item);
+        return $item;
+}, $record );
+
+$table = Parser::new()
+        ->withFormatter($formatter)
+        ->tablePosition(0)
+        ->parseHtml($result);
+
+foreach ($table as $index=>$item) {
+
+        if ($index != 0) {
+                $item[2] = substr($item[2],0,5);
+        }
+
+        //leere Zeilen durch den Termin eine Zeile vorher ersetzen
+        foreach ($item as $item_index=>&$item_item) {
+                if ($item_item == '') {
+                         $item_item = $temp_item[$item_index];
+                }
+                $temp_item[$item_index] = $item_item;
+        }
+
+}
+
+echo "<pre>";
+print_r($table);
+var_dump($table);
+echo "</pre>";
+
+
+
+
 	    return true;
     }
 
-    public function getAdditionalInformation()
-    {
-        $this->getLanguageService()->sL('LLL:EXT:my_extension/Resources/Private/Language/locallang.xlf:myTaskInformation');
-    }
 }
