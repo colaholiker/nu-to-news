@@ -19,5 +19,6 @@
         "typo3/cms": {
             "extension-key": "nu_to_news"
         }
-    }
+    },
+    "minimum-stability": "dev"
 }
