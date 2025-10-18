@@ -10,6 +10,7 @@ use TYPO3\CMS\Scheduler\Task\AbstractTask;
 
 use Bakame\TabularData\HtmlTable\Parser;
 use Bakame\TabularData\HtmlTable\Section;
+use Bakame\TabularData\HtmlTable\Table;
 
 final class NuToNews extends AbstractTask
 {
@@ -54,19 +55,25 @@ $table = Parser::new()
         ->tablePosition(0)
         ->parseHtml($result);
 
-foreach ($table as $index=>$item) {
+$tableData = $table->getTabularData();
+
+foreach ($table as $index => $item) {
 
         if ($index != 0) {
                 $item[2] = substr($item[2],0,5);
         }
 
-        //leere Zeilen durch den Termin eine Zeile vorher ersetzen
-        foreach ($item as $item_index=>&$item_item) {
-                if ($item_item == '') {
-                         $item_item = $temp_item[$item_index];
-                }
-                $temp_item[$item_index] = $item_item;
-        }
+//        //leere Zeilen durch den Termin eine Zeile vorher ersetzen
+//        foreach ($item as $item_index=>$item_item) {
+//		if ($item_item == '') {
+//			if (isset($temp_item[$item_index])) {
+//				$item_item = $temp_item[$item_index];
+//			} else {
+//				$item_item = 'blub';
+//			}
+//                }
+//		$temp_item[$item_index] = $item_item;
+//	}
 
 }
 
