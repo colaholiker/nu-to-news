@@ -13,7 +13,7 @@ use Bakame\TabularData\HtmlTable\Parser;
 use Bakame\TabularData\HtmlTable\Section;
 use Bakame\TabularData\HtmlTable\Table;
 
-use SchachvereinBalingeEV\NuToNews\Domain\Repository\CategoryRepository;
+use SchachvereinBalingeEv\NuToNews\Domain\Repository\CategoryRepository;
 
 
 final class NuToNews extends AbstractTask
