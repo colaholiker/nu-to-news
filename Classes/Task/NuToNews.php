@@ -6,7 +6,8 @@ namespace SchachvereinBalingenEv\NuToNews\Task;
 
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Scheduler\Task\AbstractTask;
-
+use TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager;
+use TYPO3\CMS\Extbase\Object\ObjectManager;
 
 use Bakame\TabularData\HtmlTable\Parser;
 use Bakame\TabularData\HtmlTable\Section;
@@ -17,9 +18,6 @@ use SchachvereinBalingeEV\NuToNews\Domain\Repository\CategoryRepository;
 
 final class NuToNews extends AbstractTask
 {
-
-	public function __construct(private CategoryRepository $categoryRepository) {}
-
 	/**
 	 * MUST be implemented by all tasks
 	 */
@@ -27,7 +25,9 @@ final class NuToNews extends AbstractTask
 	{
 		# Dependency injection cannot be used in scheduler tasks
 
-
+        $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
+        $CategoryRepository = $objectManager->get(CategoryRepository::class);
+        $categoryList = $CategoryRepository->findAll();
 
 
 
@@ -89,7 +89,6 @@ final class NuToNews extends AbstractTask
 		echo "</pre>";
 
 
-		$categoryList = $this->categoryRepository->findAll();
 		echo "<pre>";
 		var_dump($categoryList);
 		echo "</pre>";
