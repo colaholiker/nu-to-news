@@ -65,14 +65,14 @@ final class NuToNews extends AbstractTask
 
 		$tableData = $table->getTabularData();
 
-		foreach ($table as $index => $item) {
+		foreach ($tableData as $index => &$item) {
 
 			if ($index != 0) {
 				$item[2] = substr($item[2],0,5);
 			}
 
 			        //leere Zeilen durch den Termin eine Zeile vorher ersetzen
-			foreach ($item as $item_index=>$item_item) {
+			foreach ($item as $item_index=>&$item_item) {
 					if ($item_item == '') {
 						if (isset($temp_item[$item_index])) {
 							$item_item = $temp_item[$item_index];
@@ -86,8 +86,8 @@ final class NuToNews extends AbstractTask
 		}
 
 		echo "<pre>";
-		print_r($table);
-		var_dump($table);
+		print_r($tableData);
+		var_dump($tableData);
 		echo "</pre>";
 
 
