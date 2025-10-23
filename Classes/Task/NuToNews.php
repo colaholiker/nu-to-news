@@ -18,10 +18,10 @@ use Bakame\TabularData\HtmlTable\Table;
 final class NuToNews extends AbstractTask
 {
 
-	 /**
-		 *  * @var \SchachvereinBalingeEv\NuToNews\Domain\Repository\CategoryRepository
-		 *   * @inject
-		 *    */
+	/**
+	 ** @var \SchachvereinBalingeEv\NuToNews\Domain\Repository\CategoryRepository
+	 ** @TYPO3\CMS\Extbase\Annotation\Inject 
+	 **/
 	protected $categoryRepository = null;
 
 	/**
