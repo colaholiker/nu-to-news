@@ -27,7 +27,7 @@ final class NuToNews extends AbstractTask
 
         //$objectManager = GeneralUtility::makeInstance(ObjectManager::class);
         //$CategoryRepository = $objectManager->get(CategoryRepository::class);
-        $CategoryRepository = GeneralUtility::makeInstance(CategoryRepository::class);
+        $CategoryRepository = GeneralUtility::makeInstance(\CategoryRepository::class);
         $categoryList = $CategoryRepository->findAll();
 
 
