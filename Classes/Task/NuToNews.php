@@ -12,17 +12,13 @@ use Bakame\TabularData\HtmlTable\Parser;
 use Bakame\TabularData\HtmlTable\Section;
 use Bakame\TabularData\HtmlTable\Table;
 
-
+use SchachvereinBalingeEV\NuToNews\Domain\Repository\CategoryRepository;
 
 
 final class NuToNews extends AbstractTask
 {
 
-	/**
-	 ** @var \SchachvereinBalingeEv\NuToNews\Domain\Repository\CategoryRepository
-	 ** @TYPO3\CMS\Extbase\Annotation\Inject 
-	 **/
-	protected $categoryRepository = null;
+	public function __construct(private CategoryRepository $categoryRepository) {}
 
 	/**
 	 * MUST be implemented by all tasks
