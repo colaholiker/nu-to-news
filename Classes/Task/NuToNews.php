@@ -65,6 +65,8 @@ final class NuToNews extends AbstractTask
 
 		$tableData = $table->getTabularData();
 
+        $tableData = json_decode(json_encode($tableData));
+
 		foreach ($tableData as $index => &$item) {
 
 			if ($index != 0) {
