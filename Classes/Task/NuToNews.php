@@ -71,17 +71,17 @@ final class NuToNews extends AbstractTask
 				$item[2] = substr($item[2],0,5);
 			}
 
-			//        //leere Zeilen durch den Termin eine Zeile vorher ersetzen
-			//        foreach ($item as $item_index=>$item_item) {
-			//		if ($item_item == '') {
-			//			if (isset($temp_item[$item_index])) {
-			//				$item_item = $temp_item[$item_index];
-			//			} else {
-			//				$item_item = 'blub';
-			//			}
-			//                }
-			//		$temp_item[$item_index] = $item_item;
-			//	}
+			        //leere Zeilen durch den Termin eine Zeile vorher ersetzen
+			foreach ($item as $item_index=>$item_item) {
+					if ($item_item == '') {
+						if (isset($temp_item[$item_index])) {
+							$item_item = $temp_item[$item_index];
+						} else {
+							$item_item = '';
+						}
+			                }
+					$temp_item[$item_index] = $item_item;
+				}
 
 		}
 
