@@ -94,7 +94,7 @@ final class NuToNews extends AbstractTask
 
 
 		echo "<pre>";
-		//var_dump($categoryList);
+		var_dump($categoryList);
 		echo "</pre>";
 
 
