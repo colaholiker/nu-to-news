@@ -93,8 +93,8 @@ final class NuToNews extends AbstractTask
 		echo "</pre>";
 
 
-        TYPO3\CMS\Core\Utility\DebugUtility::debug($tableData, 'blub');
-        TYPO3\CMS\Core\Utility\DebugUtility::debug($categoryList, 'blub');
+        \TYPO3\CMS\Core\Utility\DebugUtility::debug($tableData, 'blub');
+        \TYPO3\CMS\Core\Utility\DebugUtility::debug($categoryList, 'blub');
 
 		return true;
 	}
