@@ -93,6 +93,10 @@ final class NuToNews extends AbstractTask
 		echo "</pre>";
 
 
+		$categoryList = $this->categoryRepository->findAll();
+		echo "<pre>";
+		var_dump($categoryList);
+		echo "</pre>";
 
 
 		return true;
