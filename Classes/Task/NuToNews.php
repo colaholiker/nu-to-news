@@ -45,6 +45,7 @@ final class NuToNews extends AbstractTask
 
 		$context = stream_context_create($options);
 		$result = file_get_contents($url, false, $context);
+
 		if ($result === false) {
 			/* Handle error */
 		}
