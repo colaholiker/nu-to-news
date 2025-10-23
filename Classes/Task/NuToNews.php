@@ -27,8 +27,8 @@ final class NuToNews extends AbstractTask
 
         //$objectManager = GeneralUtility::makeInstance(ObjectManager::class);
         //$CategoryRepository = $objectManager->get(CategoryRepository::class);
-        $CategoryRepository = GeneralUtility::makeInstance(\SchachvereinBalingenEv\NuToNews\Domain\Repository\CategoryRepository::class);
-        $categoryList = $CategoryRepository->findAll();
+        //$CategoryRepository = GeneralUtility::makeInstance(\SchachvereinBalingenEv\NuToNews\Domain\Repository\CategoryRepository::class);
+        //$categoryList = $CategoryRepository->findAll();
 
 
 
@@ -92,7 +92,7 @@ final class NuToNews extends AbstractTask
 
 
 		echo "<pre>";
-		var_dump($categoryList);
+		//var_dump($categoryList);
 		echo "</pre>";
 
 
