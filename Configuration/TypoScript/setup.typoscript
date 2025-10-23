@@ -1,0 +1,8 @@
+plugin.tx_myextension.persistence.classes {
+	ABC\MyExtension\Domain\Model\Category {
+		mapping {
+			recordType = 0
+			tableName = sys_category
+		}
+	}
+}

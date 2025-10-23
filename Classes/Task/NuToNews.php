@@ -12,80 +12,90 @@ use Bakame\TabularData\HtmlTable\Parser;
 use Bakame\TabularData\HtmlTable\Section;
 use Bakame\TabularData\HtmlTable\Table;
 
+
+
+
 final class NuToNews extends AbstractTask
 {
-    /**
-     * MUST be implemented by all tasks
-     */
-    public function execute(): bool
-    {
-        # Dependency injection cannot be used in scheduler tasks
+
+	 /**
+		 *  * @var \SchachvereinBalingeEv\NuToNews\Domain\Repository\CategoryRepository
+		 *   * @inject
+		 *    */
+	protected $categoryRepository = null;
+
+	/**
+	 * MUST be implemented by all tasks
+	 */
+	public function execute(): bool
+	{
+		# Dependency injection cannot be used in scheduler tasks
 
 
 
 
 
-$url = 'https://svw-schach.liga.nu/cgi-bin/WebObjects/nuLigaSCHACHDE.woa/wa/clubMeetings?club=12004';
-$data = ['searchType' => '1', 'searchTimeRangeFrom' => '01.01.2000', 'searchTimeRangeTo' => '31.12.2099', 'selectedTeamId' => 'WONoSelectionString', 'club' => '12004', 'searchMeetings' => 'Suchen'];
+		$url = 'https://svw-schach.liga.nu/cgi-bin/WebObjects/nuLigaSCHACHDE.woa/wa/clubMeetings?club=12004';
+		$data = ['searchType' => '1', 'searchTimeRangeFrom' => '01.01.2000', 'searchTimeRangeTo' => '31.12.2099', 'selectedTeamId' => 'WONoSelectionString', 'club' => '12004', 'searchMeetings' => 'Suchen'];
 
-// use key 'http' even if you send the request to https://...
-$options = [
-    'http' => [
-        'header' => "Content-type: application/x-www-form-urlencoded\r\n",
-        'method' => 'POST',
-        'content' => http_build_query($data),
-    ],
-];
+		// use key 'http' even if you send the request to https://...
+		$options = [
+			'http' => [
+				'header' => "Content-type: application/x-www-form-urlencoded\r\n",
+				'method' => 'POST',
+				'content' => http_build_query($data),
+			],
+		];
 
-$context = stream_context_create($options);
-$result = file_get_contents($url, false, $context);
-if ($result === false) {
-    /* Handle error */
-}
+		$context = stream_context_create($options);
+		$result = file_get_contents($url, false, $context);
+		if ($result === false) {
+			/* Handle error */
+		}
 
-#var_dump($result);
+		#var_dump($result);
 
-$formatter = fn (array $record): array => array_map( function($item) {
-        $item = mb_trim($item);
-        return $item;
-}, $record );
+		$formatter = fn (array $record): array => array_map( function($item) {
+			$item = mb_trim($item);
+			return $item;
+		}, $record );
 
-$table = Parser::new()
-        ->withFormatter($formatter)
-        ->tablePosition(0)
-        ->parseHtml($result);
+		$table = Parser::new()
+			->withFormatter($formatter)
+			->tablePosition(0)
+			->parseHtml($result);
 
-$tableData = $table->getTabularData();
+		$tableData = $table->getTabularData();
 
-foreach ($table as $index => $item) {
+		foreach ($table as $index => $item) {
 
-        if ($index != 0) {
-                $item[2] = substr($item[2],0,5);
-        }
+			if ($index != 0) {
+				$item[2] = substr($item[2],0,5);
+			}
 
-//        //leere Zeilen durch den Termin eine Zeile vorher ersetzen
-//        foreach ($item as $item_index=>$item_item) {
-//		if ($item_item == '') {
-//			if (isset($temp_item[$item_index])) {
-//				$item_item = $temp_item[$item_index];
-//			} else {
-//				$item_item = 'blub';
-//			}
-//                }
-//		$temp_item[$item_index] = $item_item;
-//	}
+			//        //leere Zeilen durch den Termin eine Zeile vorher ersetzen
+			//        foreach ($item as $item_index=>$item_item) {
+			//		if ($item_item == '') {
+			//			if (isset($temp_item[$item_index])) {
+			//				$item_item = $temp_item[$item_index];
+			//			} else {
+			//				$item_item = 'blub';
+			//			}
+			//                }
+			//		$temp_item[$item_index] = $item_item;
+			//	}
 
-}
+		}
 
-echo "<pre>";
-print_r($table);
-var_dump($table);
-echo "</pre>";
-
-
+		echo "<pre>";
+		print_r($table);
+		var_dump($table);
+		echo "</pre>";
 
 
-	    return true;
-    }
+
+
+		return true;
+	}
 
 }
