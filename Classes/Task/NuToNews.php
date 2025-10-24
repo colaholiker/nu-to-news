@@ -112,6 +112,8 @@ final class NuToNews extends AbstractTask
             print_r($categorie_name);
             echo "</pre>";
 
+
+
         }
 
         \TYPO3\CMS\Core\Utility\DebugUtility::debug($tableData, 'blub');
