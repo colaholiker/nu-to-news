@@ -106,7 +106,9 @@ final class NuToNews extends AbstractTask
 
             $categorie_name .= ' - ' . $item[6];
 
+            echo "<pre>";
             print_r($categorie_name);
+            echo "</pre>";
 
         }
 
