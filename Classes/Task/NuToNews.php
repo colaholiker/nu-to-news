@@ -91,8 +91,11 @@ final class NuToNews extends AbstractTask
 
 
         foreach ($tableData as $index => $item) {
-            //erstellen prüfen Categorien
+            if ($item[0] == 'Tag Datum Zeit') {
+                continue;
+            }
 
+            //erstellen prüfen Categorien
             $categorie_name = '';
             $categorie_name .= 'nu - ';
 
@@ -103,7 +106,6 @@ final class NuToNews extends AbstractTask
             if (str_contains($item[8],'Balingen')) {
                 $categorie_name .= $item[8];
             }
-
             $categorie_name .= ' - ' . $item[6];
 
             echo "<pre>";
