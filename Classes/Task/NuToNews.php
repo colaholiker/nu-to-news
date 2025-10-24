@@ -69,23 +69,46 @@ final class NuToNews extends AbstractTask
 
 		foreach ($tableData as $index => &$item) {
 
-			if ($index != 0) {
-				$item[2] = substr($item[2],0,5);
-			}
+            if ($index != 0) {
+                $item[2] = substr($item[2], 0, 5);
+            }
 
-			        //leere Zeilen durch den Termin eine Zeile vorher ersetzen
-			foreach ($item as $item_index=>&$item_item) {
-					if ($item_item == '') {
-						if (isset($temp_item[$item_index])) {
-							$item_item = $temp_item[$item_index];
-						} else {
-							$item_item = '';
-						}
-			                }
-					$temp_item[$item_index] = $item_item;
-				}
+            //leere Zeilen durch den Termin eine Zeile vorher ersetzen
+            foreach ($item as $item_index => &$item_item) {
+                if ($item_item == '') {
+                    if (isset($temp_item[$item_index])) {
+                        $item_item = $temp_item[$item_index];
+                    } else {
+                        $item_item = '';
+                    }
+                }
+                $temp_item[$item_index] = $item_item;
+            }
+            unset($item_item);
 
 		}
+        unset($item);
+
+
+        foreach ($tableData as $index => $item) {
+            //erstellen prüfen Categorien
+
+            $categorie_name = '';
+            $categorie_name .= 'nu - ';
+
+            // Categorie erstellen, finden
+            if (str_contains($item[7],'Balingen')) {
+                $categorie_name .= $items[7];
+            }
+            if (str_contains($item[8],'Balingen')) {
+                $categorie_name .= $items[8];
+            }
+
+            $categorie_name .= ' - ' . $item[6];
+
+            print_r($categorie_name);
+
+        }
 
         \TYPO3\CMS\Core\Utility\DebugUtility::debug($tableData, 'blub');
         \TYPO3\CMS\Core\Utility\DebugUtility::debug($categoryList, 'blub');
