@@ -144,7 +144,7 @@ final class NuToNews extends AbstractTask
             if ($newsRepository->count(['keywords' => $news_hash])) {
                 $news = $newsRepository->findOneBy(['keywords' => $news_hash]);
                 $news->setTitle($news_title);
-                $news->setHidden(0);
+                $news->setHidden(false);
                 echo "read";
             } else {
                 $news = new \GeorgRinger\News\Domain\Model\NewsDefault;
@@ -155,7 +155,7 @@ final class NuToNews extends AbstractTask
                 $news->setPathSegment($news_hash);
                 $news->setBodytext('Es wurde noch kein Spielberricht hinterlegt.');
                 $news->setTitle($news_title);
-                $news->setHidden(0);
+                $news->setHidden(false);
                 $news->setAuthor('svw.info');
                 $news->setEmail('webmaster@svbalingen.de');
                 $news->SetCategory($category);
