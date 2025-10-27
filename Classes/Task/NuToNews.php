@@ -140,7 +140,7 @@ final class NuToNews extends AbstractTask
             $news_hash = "banane";
             $news = $newsRepository->findOneBy(['keywords' => $news_hash]);
 
-            \TYPO3\CMS\Core\Utility\DebugUtility::debug($news->toArray(), 'blub');
+            \TYPO3\CMS\Core\Utility\DebugUtility::debug($news, 'blub');
 
             unset($category);
             unset($category_name);
