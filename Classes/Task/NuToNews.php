@@ -145,7 +145,7 @@ final class NuToNews extends AbstractTask
                 echo "read";
             } else {
                 $news = new \GeorgRinger\News\Domain\Model\NewsDefault;
-                $news->setUid(self::NEWS_PID);
+                $news->setPid(self::NEWS_PID);
                 $news->setTstame(time());
                 $news->setCrdate(time());
                 $news->setKeywords($news_hash);
