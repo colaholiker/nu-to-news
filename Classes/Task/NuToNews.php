@@ -28,14 +28,16 @@ final class NuToNews extends AbstractTask
         //$objectManager = GeneralUtility::makeInstance(ObjectManager::class);
         //$CategoryRepository = $objectManager->get(CategoryRepository::class);
         $CategoryRepository = GeneralUtility::makeInstance(\SchachvereinBalingenEv\NuToNews\Domain\Repository\CategoryRepository::class);
-        $categoryList = $CategoryRepository->findAll();
+        //$categoryList = $CategoryRepository->findAll();
 
 
 
 		$url = 'https://svw-schach.liga.nu/cgi-bin/WebObjects/nuLigaSCHACHDE.woa/wa/clubMeetings?club=12004';
 		$data = ['searchType' => '1', 'searchTimeRangeFrom' => '01.01.2000', 'searchTimeRangeTo' => '31.12.2099', 'selectedTeamId' => 'WONoSelectionString', 'club' => '12004', 'searchMeetings' => 'Suchen'];
 
-		// use key 'http' even if you send the request to https://...
+        echo "<pre>";
+
+        // use key 'http' even if you send the request to https://...
 		$options = [
 			'http' => [
 				'header' => "Content-type: application/x-www-form-urlencoded\r\n",
@@ -108,18 +110,20 @@ final class NuToNews extends AbstractTask
             }
             $categorie_name .= ' - ' . $item[6];
 
-            echo "<pre>";
             print_r($categorie_name);
-            echo "</pre>";
 
+            $categoryList = $CategoryRepository->findBy(['title' => 'Ergebnisse']);
 
+            print_r($categoryList);
 
         }
 
         \TYPO3\CMS\Core\Utility\DebugUtility::debug($tableData, 'blub');
         \TYPO3\CMS\Core\Utility\DebugUtility::debug($categoryList, 'blub');
 
-		return true;
+        echo "</pre>";
+
+        return true;
 	}
 
 }
