@@ -18,13 +18,18 @@ use SchachvereinBalingenEv\NuToNews\Domain\Repository\CategoryRepository;
 
 final class NuToNews extends AbstractTask
 {
+    const CATEGORY_PID = 7;
+    const CATEGORY_PARENT = 6126;
+
 	/**
 	 * MUST be implemented by all tasks
 	 */
 	public function execute(): bool
 	{
-		# Dependency injection cannot be used in scheduler tasks
 
+
+
+		# Dependency injection cannot be used in scheduler tasks
         $CategoryRepository = GeneralUtility::makeInstance(\SchachvereinBalingenEv\NuToNews\Domain\Repository\CategoryRepository::class);
 
 
@@ -113,7 +118,8 @@ final class NuToNews extends AbstractTask
             } else {
                 $category = new \SchachvereinBalingenEv\NuToNews\Domain\Model\Category;
                 $category->setTitle($categorie_name);
-
+                $category->setPid(self::CATEGORY_PID);
+                $category->setParent(self::CATEGORY_PARENT);
 
             }
 
