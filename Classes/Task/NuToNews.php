@@ -114,8 +114,6 @@ final class NuToNews extends AbstractTask
 
             $categoryList = $CategoryRepository->findBy(['title' => 'Ergebnisse']);
 
-            var_dump($categoryList);
-
             \TYPO3\CMS\Core\Utility\DebugUtility::debug($categoryList);
 
         }
