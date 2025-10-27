@@ -21,7 +21,7 @@ final class NuToNews extends AbstractTask
 {
     const CATEGORY_PID = 7;
     const CATEGORY_PARENT = 6126;
-    const NEWS_PPID = 312;
+    const NEWS_PID = 312;
 
 	/**
 	 * MUST be implemented by all tasks
@@ -35,7 +35,7 @@ final class NuToNews extends AbstractTask
         $newsRepository = GeneralUtility::makeInstance(\GeorgRinger\News\Domain\Repository\NewsRepository::class);
 
         $querySettings = $newsRepository->createQuery()->getQuerySettings();
-        $querySettings->setStoragePageIds([1707]);
+        $querySettings->setStoragePageIds([self::NEWS_PID]);
         //$querySettings->setRecursive(99);
 
         $newsRepository->setDefaultQuerySettings($querySettings);
@@ -145,6 +145,12 @@ final class NuToNews extends AbstractTask
                 echo "read";
             } else {
                 $news = new \GeorgRinger\News\Domain\Model\NewsDefault;
+                $news->setUid(self::NEWS_PID);
+                $news->setTstame(time());
+                $news->setCrdate(time());
+                $news->setKeywords($news_hash);
+                $news->setPathSegment($news_hash);
+
                 echo "write";
             }
 
