@@ -153,7 +153,7 @@ final class NuToNews extends AbstractTask
                 $news->setDatetime($news_timestamp);
                 $news->setStarttime($news_timestamp-259200);
 
-                $NewsRepository->update($news);
+                $newsRepository->update($news);
                 echo "read";
             } else {
                 $news = new \GeorgRinger\News\Domain\Model\NewsDefault;
