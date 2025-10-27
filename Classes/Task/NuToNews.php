@@ -122,8 +122,8 @@ final class NuToNews extends AbstractTask
                 $category->setPid(self::CATEGORY_PID);
                 $category->setParent($CategoryRepository->findByUid(self::CATEGORY_PARENT));
 
-                $CategoryRepository->create($category);
-                $CategoryRepository->update();
+                $CategoryRepository->add($category);
+                $CategoryRepository->update($category);
 
 
                 echo "write";
