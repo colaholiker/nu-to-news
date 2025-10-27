@@ -144,7 +144,7 @@ final class NuToNews extends AbstractTask
                 $news = $newsRepository->findOneBy(['keywords' => $news_hash]);
                 echo "read";
             } else {
-                //$news = new \
+                $news = new \GeorgRinger\News\Domain\Model\NewsDefault;
                 echo "write";
             }
 
