@@ -29,7 +29,7 @@ final class NuToNews extends AbstractTask
 	public function execute(): bool
 	{
 
-        $querySettings = GeneralUtility::makeInstance(\TYPO3\CMS\Extbase\Persistence\Generic\Typo3QuerySettings::class);
+        $querySettings = $this->createQuery()->getQuerySettings();
         $querySettings->setRespectStoragePage(FALSE);
 
         $CategoryRepository = GeneralUtility::makeInstance(\SchachvereinBalingenEv\NuToNews\Domain\Repository\CategoryRepository::class);
