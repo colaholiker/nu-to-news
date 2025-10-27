@@ -14,6 +14,7 @@ use Bakame\TabularData\HtmlTable\Section;
 use Bakame\TabularData\HtmlTable\Table;
 
 use SchachvereinBalingenEv\NuToNews\Domain\Repository\CategoryRepository;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Domain\Repository\PageRepository;
 
 
@@ -33,8 +34,8 @@ final class NuToNews extends AbstractTask
 
 		# Dependency injection cannot be used in scheduler tasks
         $CategoryRepository = GeneralUtility::makeInstance(\SchachvereinBalingenEv\NuToNews\Domain\Repository\CategoryRepository::class);
-        $PageRepository = GeneralUtility::makeInstance(\SchachvereinBalingenEv\NuToNews\Domain\Repository\PageRepository::class);
         $persistenceManager = GeneralUtility::makeInstance(\TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager::class);
+        $pageRepository = GeneralUtility::makeInstance(PageRepository::class);
 
 		$url = 'https://svw-schach.liga.nu/cgi-bin/WebObjects/nuLigaSCHACHDE.woa/wa/clubMeetings?club=12004';
 		$data = ['searchType' => '1', 'searchTimeRangeFrom' => '01.01.2000', 'searchTimeRangeTo' => '31.12.2099', 'selectedTeamId' => 'WONoSelectionString', 'club' => '12004', 'searchMeetings' => 'Suchen'];
@@ -136,7 +137,8 @@ final class NuToNews extends AbstractTask
             $page_name = 'Ergebnisse 2014-2015';
 
             //if ($PageRepository->count(['Header' => $page_name])) {
-                $page = $PageRepository->findOneBy(['header' => $page_name]);
+                //$page = $PageRepository->findOneBy(['header' => $page_name]);
+                $page = $PageRepository->getRecordsByFields('pages', 'title', $page_name);
             //} else {
 
             //}
