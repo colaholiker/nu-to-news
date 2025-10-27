@@ -125,6 +125,7 @@ final class NuToNews extends AbstractTask
                 $CategoryRepository->create($category);
                 $CategoryRepository->update();
 
+
                 echo "write";
             }
 
