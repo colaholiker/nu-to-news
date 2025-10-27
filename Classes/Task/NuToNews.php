@@ -14,12 +14,14 @@ use Bakame\TabularData\HtmlTable\Section;
 use Bakame\TabularData\HtmlTable\Table;
 
 use SchachvereinBalingenEv\NuToNews\Domain\Repository\CategoryRepository;
+use TYPO3\CMS\Core\Domain\Repository\PageRepository;
 
 
 final class NuToNews extends AbstractTask
 {
     const CATEGORY_PID = 7;
     const CATEGORY_PARENT = 6126;
+    const NEWS_PPID = 312;
 
 	/**
 	 * MUST be implemented by all tasks
@@ -31,6 +33,7 @@ final class NuToNews extends AbstractTask
 
 		# Dependency injection cannot be used in scheduler tasks
         $CategoryRepository = GeneralUtility::makeInstance(\SchachvereinBalingenEv\NuToNews\Domain\Repository\CategoryRepository::class);
+        $PageRepository = GeneralUtility::makeInstance(\TYPO3\CMS\Core\Domain\Repository\PageRepository::class);
         $persistenceManager = GeneralUtility::makeInstance(\TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager::class);
 
 		$url = 'https://svw-schach.liga.nu/cgi-bin/WebObjects/nuLigaSCHACHDE.woa/wa/clubMeetings?club=12004';
@@ -102,7 +105,9 @@ final class NuToNews extends AbstractTask
             $categorie_name = '';
             $categorie_name .= 'nu - ';
 
+            //*********************************
             // Categorie erstellen, finden
+            //*********************************
             if (str_contains($item[7],'Balingen')) {
                 $categorie_name .= $item[7];
             }
@@ -111,11 +116,9 @@ final class NuToNews extends AbstractTask
             }
             $categorie_name .= ' - ' . $item[6];
 
-            var_dump($categorie_name);
 
             if ($CategoryRepository->count(['title' => $categorie_name])) {
                 $category = $CategoryRepository->findOneBy(['title' => $categorie_name]);
-                echo "read";
             } else {
                 $category = new \SchachvereinBalingenEv\NuToNews\Domain\Model\Category;
                 $category->setTitle($categorie_name);
@@ -124,10 +127,23 @@ final class NuToNews extends AbstractTask
 
                 $CategoryRepository->add($category);
                 $persistenceManager->persistAll();
-                echo "write";
             }
 
-            \TYPO3\CMS\Core\Utility\DebugUtility::debug($category, 'blub');
+            //*********************************
+            // Page/sysorder für Ergebnisse
+            // erstellen, finden
+            //*********************************
+            $page_name = 'Ergebnisse 2014-2015';
+
+            if ($PageRepository->count(['Header' => $page_name])) {
+                $page = $PageRepository->findOneBy(['header' => $page_name]);
+            } else {
+
+            }
+
+
+
+            \TYPO3\CMS\Core\Utility\DebugUtility::debug($page, 'blub');
 
             unset($category);
             unset($category_name);
