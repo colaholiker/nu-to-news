@@ -135,11 +135,11 @@ final class NuToNews extends AbstractTask
             //*********************************
             $page_name = 'Ergebnisse 2014-2015';
 
-            if ($PageRepository->count(['Header' => $page_name])) {
+            //if ($PageRepository->count(['Header' => $page_name])) {
                 $page = $PageRepository->findOneBy(['header' => $page_name]);
-            } else {
+            //} else {
 
-            }
+            //}
 
 
 
