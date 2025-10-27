@@ -119,7 +119,7 @@ final class NuToNews extends AbstractTask
                 $category = new \SchachvereinBalingenEv\NuToNews\Domain\Model\Category;
                 $category->setTitle($categorie_name);
                 $category->setPid(self::CATEGORY_PID);
-                $category->setParent(self::CATEGORY_PARENT);
+                $category->setParent($CategoryRepository->findByUid(self::CATEGORY_PARENT));
 
             }
 
