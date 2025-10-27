@@ -136,7 +136,6 @@ final class NuToNews extends AbstractTask
 
         echo "</pre>";
 
-
         $CategoryRepository->persistAll();
         return true;
 	}
