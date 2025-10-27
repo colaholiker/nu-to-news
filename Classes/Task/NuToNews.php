@@ -112,7 +112,11 @@ final class NuToNews extends AbstractTask
 
             var_dump($categorie_name);
 
-            $categoryList = $CategoryRepository->findBy(['title' => 'Ergebnisse']);
+            if ($CategoryRepository->count(['title' => $categorie_name])) {
+                echo "blub\n";
+            }
+
+            $categoryList = $CategoryRepository->findBy(['title' => $categorie_name]);
 
             \TYPO3\CMS\Core\Utility\DebugUtility::debug($categoryList);
 
