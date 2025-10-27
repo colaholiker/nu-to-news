@@ -111,7 +111,7 @@ final class NuToNews extends AbstractTask
             if ($CategoryRepository->count(['title' => $categorie_name])) {
                 $category = $CategoryRepository->findOneBy(['title' => $categorie_name]);
             } else {
-                $category = new(\SchachvereinBalingenEv\NuToNews\Domain\Category:class);
+                $category = new \SchachvereinBalingenEv\NuToNews\Domain\Category;
                 $category->setTitle($categorie_name);
 
 
