@@ -134,7 +134,7 @@ final class NuToNews extends AbstractTask
             //*********************
 
             $news_hash = "26072f26e41fb786d55ed3d73d66dc60";
-            $news = $NewsRepository->findOneBy(['title' => $news_hash]);
+            $news = $NewsRepository->findOneBy(['keywords' => $news_hash]);
 
 
             \TYPO3\CMS\Core\Utility\DebugUtility::debug($news, 'blub');
