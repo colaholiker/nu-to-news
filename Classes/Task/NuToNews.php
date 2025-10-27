@@ -115,12 +115,14 @@ final class NuToNews extends AbstractTask
 
             if ($CategoryRepository->count(['title' => $categorie_name])) {
                 $category = $CategoryRepository->findOneBy(['title' => $categorie_name]);
+                echo "read";
             } else {
                 $category = new \SchachvereinBalingenEv\NuToNews\Domain\Model\Category;
                 $category->setTitle($categorie_name);
                 $category->setPid(self::CATEGORY_PID);
                 $category->setParent($CategoryRepository->findByUid(self::CATEGORY_PARENT));
 
+                echo "write";
             }
 
             \TYPO3\CMS\Core\Utility\DebugUtility::debug($category, 'blub');
