@@ -123,9 +123,6 @@ final class NuToNews extends AbstractTask
                 $category->setParent($CategoryRepository->findByUid(self::CATEGORY_PARENT));
 
                 $CategoryRepository->add($category);
-                $CategoryRepository->update($category);
-
-
                 echo "write";
             }
 
@@ -139,6 +136,8 @@ final class NuToNews extends AbstractTask
 
         echo "</pre>";
 
+
+        $CategoryRepository->persistAll();
         return true;
 	}
 
