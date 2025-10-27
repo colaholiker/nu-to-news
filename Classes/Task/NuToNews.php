@@ -111,7 +111,7 @@ final class NuToNews extends AbstractTask
             if ($CategoryRepository->count(['title' => $categorie_name])) {
                 $category = $CategoryRepository->findOneBy(['title' => $categorie_name]);
             } else {
-                $category = new \SchachvereinBalingenEv\NuToNews\Domain\Category;
+                $category = new \SchachvereinBalingenEv\NuToNews\Domain\Model\Category;
                 $category->setTitle($categorie_name);
 
 
@@ -124,7 +124,6 @@ final class NuToNews extends AbstractTask
         }
 
         \TYPO3\CMS\Core\Utility\DebugUtility::debug($tableData, 'blub');
-        \TYPO3\CMS\Core\Utility\DebugUtility::debug($categoryList, 'blub');
 
         echo "</pre>";
 
