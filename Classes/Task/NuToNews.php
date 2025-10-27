@@ -137,7 +137,7 @@ final class NuToNews extends AbstractTask
 
             //if ($PageRepository->count(['Header' => $page_name])) {
                 //$page = $PageRepository->findOneBy(['header' => $page_name]);
-                $page = $PageRepository->getRecordsByFields('pages', 'title', $page_name);
+                $page = $PageRepository->count();
             //} else {
 
             //}
