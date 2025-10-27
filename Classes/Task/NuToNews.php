@@ -29,14 +29,16 @@ final class NuToNews extends AbstractTask
 	public function execute(): bool
 	{
 
-        $querySettings = $this->createQuery()->getQuerySettings();
-        $querySettings->setRespectStoragePage(FALSE);
 
         $CategoryRepository = GeneralUtility::makeInstance(\SchachvereinBalingenEv\NuToNews\Domain\Repository\CategoryRepository::class);
         $persistenceManager = GeneralUtility::makeInstance(\TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager::class);
-        $NewsRepository = GeneralUtility::makeInstance(\GeorgRinger\News\Domain\Repository\NewsRepository::class);
+        $newsRepository = GeneralUtility::makeInstance(\GeorgRinger\News\Domain\Repository\NewsRepository::class);
 
-        $NewsRepository->setDefaultQuerySettings($querySettings);
+        $querySettings = $newsRepository->createQuery()->getQuerySettings();
+        $querySettings->setStoragePageIds([312]);
+        $querySettings->setRecursive(99);
+
+        $newsRepository->setDefaultQuerySettings($querySettings);
 
 		$url = 'https://svw-schach.liga.nu/cgi-bin/WebObjects/nuLigaSCHACHDE.woa/wa/clubMeetings?club=12004';
 		$data = ['searchType' => '1', 'searchTimeRangeFrom' => '01.01.2000', 'searchTimeRangeTo' => '31.12.2099', 'selectedTeamId' => 'WONoSelectionString', 'club' => '12004', 'searchMeetings' => 'Suchen'];
@@ -136,8 +138,8 @@ final class NuToNews extends AbstractTask
             //*********************
 
             $news_hash = "26072f26e41fb786d55ed3d73d66dc60";
-            $news = $NewsRepository->findOneBy(['keywords' => $news_hash]);
-            $news = $NewsRepository->findAll();
+            $news = $newsRepository->findOneBy(['keywords' => $news_hash]);
+            $news = $newsRepository->findAll();
 
             \TYPO3\CMS\Core\Utility\DebugUtility::debug($news->toArray(), 'blub');
 
