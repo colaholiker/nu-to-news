@@ -91,7 +91,10 @@ final class NuToNews extends AbstractTask
                         $item_item = '';
                     }
                 }
-                $temp_item[$item_index] = $item_item;
+
+                if (($item_index == 0) || ($item_index == 1) || ($item_index == 2)) {
+                    $temp_item[$item_index] = $item_item;
+                }
             }
             unset($item_item);
 
