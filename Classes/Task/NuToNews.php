@@ -148,7 +148,7 @@ final class NuToNews extends AbstractTask
             var_dump("$item[1] - $item[4] - $item[5]  - $item[6] - $item[7] - $item[8]");
             var_dump($news_hash);
             var_dump($newsRepository->count(['keywords' => $news_hash]));
-            var_dump( $newsRepository->findOneBy(['keywords' => $news_hash]));
+            \TYPO3\CMS\Core\Utility\DebugUtility::debug($newsRepository->findOneBy(['keywords' => $news_hash]));
 
             if ($newsRepository->count(['keywords' => $news_hash])) {
                 $news = $newsRepository->findOneBy(['keywords' => $news_hash]);
@@ -181,7 +181,6 @@ final class NuToNews extends AbstractTask
                 $newsRepository->add($news);
                 $persistenceManager->persistAll();
                 echo "write";
-                die();
             }
 
 
