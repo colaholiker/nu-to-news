@@ -21,7 +21,7 @@ final class NuToNews extends AbstractTask
 {
     const CATEGORY_PID = 7;
     const CATEGORY_PARENT = 6126;
-    const NEWS_PID = 312;
+    const NEWS_PID = 1707;
 
 	/**
 	 * MUST be implemented by all tasks
@@ -138,10 +138,13 @@ final class NuToNews extends AbstractTask
             //*********************
 
             $news_hash = md5("$item[1] - $item[4] - $item[5]  - $item[6] - $item[7] - $item[8]");
+            $news_title = 'banane';
             //$news = $newsRepository->findOneBy(['keywords' => $news_hash]);
 
             if ($newsRepository->count(['keywords' => $news_hash])) {
                 $news = $newsRepository->findOneBy(['keywords' => $news_hash]);
+                $news->setTitle($news_title);
+                $news->setHidden(0);
                 echo "read";
             } else {
                 $news = new \GeorgRinger\News\Domain\Model\NewsDefault;
@@ -150,7 +153,12 @@ final class NuToNews extends AbstractTask
                 $news->setCrdate(time());
                 $news->setKeywords($news_hash);
                 $news->setPathSegment($news_hash);
-
+                $news->setBodytext('Es wurde noch kein Spielberricht hinterlegt.');
+                $news->setTitle($news_title);
+                $news->setHidden(0);
+                $news->setAuthor('svw.info');
+                $news->setEmail('webmaster@svbalingen.de');
+                $news->SetCategory($category);
                 echo "write";
             }
 
