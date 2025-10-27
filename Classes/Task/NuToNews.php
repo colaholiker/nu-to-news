@@ -35,8 +35,8 @@ final class NuToNews extends AbstractTask
         $newsRepository = GeneralUtility::makeInstance(\GeorgRinger\News\Domain\Repository\NewsRepository::class);
 
         $querySettings = $newsRepository->createQuery()->getQuerySettings();
-        $querySettings->setStoragePageIds([312]);
-        $querySettings->setRecursive(99);
+        $querySettings->setStoragePageIds([1606]);
+        //$querySettings->setRecursive(99);
 
         $newsRepository->setDefaultQuerySettings($querySettings);
 
