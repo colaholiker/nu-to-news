@@ -110,9 +110,9 @@ final class NuToNews extends AbstractTask
             }
             $categorie_name .= ' - ' . $item[6];
 
-            print_r($categorie_name);
+            var_dump($categorie_name);
 
-            //$categoryList = $CategoryRepository->findBy(['title' => 'Ergebnisse']);
+            $categoryList = $CategoryRepository->findBy(['title' => 'Ergebnisse']);
 
             //print_r($categoryList);
 
