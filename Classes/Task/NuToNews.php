@@ -141,7 +141,7 @@ final class NuToNews extends AbstractTask
             //$news = $newsRepository->findOneBy(['keywords' => $news_hash]);
 
             if ($newsRepository->count(['keywords' => $news_hash])) {
-                $news = $newsRepository->findOneBy(['hash' => $news_hash]);
+                $news = $newsRepository->findOneBy(['keywords' => $news_hash]);
                 echo "read";
             } else {
                 //$news = new \
