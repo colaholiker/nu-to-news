@@ -129,7 +129,7 @@ final class NuToNews extends AbstractTask
                 $category = new \GeorgRinger\News\Domain\Model\Category;
                 $category->setTitle($categorie_name);
                 $category->setPid(self::CATEGORY_PID);
-                $category->setParent($CategoryRepository->findByUid(self::CATEGORY_PARENT));
+                $category->setParentcategory($CategoryRepository->findByUid(self::CATEGORY_PARENT));
 
                 $CategoryRepository->add($category);
                 $persistenceManager->persistAll();
