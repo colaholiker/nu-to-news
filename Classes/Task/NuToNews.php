@@ -114,6 +114,8 @@ final class NuToNews extends AbstractTask
 
             $categoryList = $CategoryRepository->findBy(['title' => 'Ergebnisse']);
 
+            var_dump($categoryList);
+
             //print_r($categoryList);
 
         }
