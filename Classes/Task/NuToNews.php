@@ -116,7 +116,7 @@ final class NuToNews extends AbstractTask
 
             var_dump($categoryList);
 
-            //print_r($categoryList);
+            \TYPO3\CMS\Core\Utility\DebugUtility::debug($categoryList);
 
         }
 
