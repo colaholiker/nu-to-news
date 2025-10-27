@@ -145,6 +145,7 @@ final class NuToNews extends AbstractTask
             //SF Dornstetten-Pfalzgrafenweiler 4 - SV Balingen 7 = 3,5:2,5
             //$news = $newsRepository->findOneBy(['keywords' => $news_hash]);
 
+            var_dump($news_hash);
             var_dump($newsRepository->count(['keywords' => $news_hash]));
 
             if ($newsRepository->count(['keywords' => $news_hash])) {
