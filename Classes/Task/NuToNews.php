@@ -154,7 +154,7 @@ final class NuToNews extends AbstractTask
                 $news->setStarttime($news_timestamp-259200);
 
                 $newsRepository->update($news);
-                $persistenceManager->persistAll();
+                //$persistenceManager->persistAll();
                 echo "read";
             } else {
                 $news = new \GeorgRinger\News\Domain\Model\NewsDefault;
