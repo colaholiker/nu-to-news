@@ -149,7 +149,11 @@ final class NuToNews extends AbstractTask
                 $news = $newsRepository->findOneBy(['keywords' => $news_hash]);
                 $news->setTitle($news_title);
                 $news->setHidden(false);
+                $news->setDeleted(false);
                 $news->setDatetime($news_timestamp);
+                $news->setStarttime($news_timestamp-259200);
+
+                $NewsRepository->update($news);
                 echo "read";
             } else {
                 $news = new \GeorgRinger\News\Domain\Model\NewsDefault;
@@ -161,13 +165,18 @@ final class NuToNews extends AbstractTask
                 $news->setBodytext('Es wurde noch kein Spielberricht hinterlegt.');
                 $news->setTitle($news_title);
                 $news->setHidden(false);
+                $news->setDeleted(false);
                 $news->setAuthor('svw.info');
                 $news->setAuthorEmail('webmaster@svbalingen.de');
                 $news->addCategory($category);
                 $news->setDatetime($news_timestamp);
                 $news->setStarttime($news_timestamp-259200);
+
+                $newsRepository->add($news);
                 echo "write";
             }
+
+            $persistenceManager->persistAll();
 
 
             \TYPO3\CMS\Core\Utility\DebugUtility::debug($news, $news_hash);
