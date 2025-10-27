@@ -145,6 +145,8 @@ final class NuToNews extends AbstractTask
             //SF Dornstetten-Pfalzgrafenweiler 4 - SV Balingen 7 = 3,5:2,5
             //$news = $newsRepository->findOneBy(['keywords' => $news_hash]);
 
+            var_dump($newsRepository->count(['keywords' => $news_hash]));
+
             if ($newsRepository->count(['keywords' => $news_hash])) {
                 $news = $newsRepository->findOneBy(['keywords' => $news_hash]);
                 $news->setTitle($news_title);
@@ -154,7 +156,7 @@ final class NuToNews extends AbstractTask
                 $news->setStarttime($news_timestamp-259200);
 
                 $newsRepository->update($news);
-                //$persistenceManager->persistAll();
+                $persistenceManager->persistAll();
                 echo "read";
             } else {
                 $news = new \GeorgRinger\News\Domain\Model\NewsDefault;
@@ -176,6 +178,7 @@ final class NuToNews extends AbstractTask
                 $newsRepository->add($news);
                 $persistenceManager->persistAll();
                 echo "write";
+                die();
             }
 
 
