@@ -25,11 +25,7 @@ final class NuToNews extends AbstractTask
 	{
 		# Dependency injection cannot be used in scheduler tasks
 
-        //$objectManager = GeneralUtility::makeInstance(ObjectManager::class);
-        //$CategoryRepository = $objectManager->get(CategoryRepository::class);
         $CategoryRepository = GeneralUtility::makeInstance(\SchachvereinBalingenEv\NuToNews\Domain\Repository\CategoryRepository::class);
-        //$categoryList = $CategoryRepository->findAll();
-
 
 
 		$url = 'https://svw-schach.liga.nu/cgi-bin/WebObjects/nuLigaSCHACHDE.woa/wa/clubMeetings?club=12004';
@@ -115,6 +111,9 @@ final class NuToNews extends AbstractTask
             if ($CategoryRepository->count(['title' => $categorie_name])) {
                 $category = $CategoryRepository->findOneBy(['title' => $categorie_name]);
             } else {
+                $category = new(\SchachvereinBalingenEv\NuToNews\Domain\Category:class);
+                $category->setTitle($categorie_name);
+
 
             }
 
