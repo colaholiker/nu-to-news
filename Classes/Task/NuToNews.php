@@ -137,7 +137,8 @@ final class NuToNews extends AbstractTask
             //*********************
 
             $news_hash = md5("$item[1] - $item[4] - $item[5]  - $item[6] - $item[7] - $item[8]");
-            $news_title = 'banane';
+            $news_title = "$item[7] - $item[8] = $item[9]";
+            //SF Dornstetten-Pfalzgrafenweiler 4 - SV Balingen 7 = 3,5:2,5
             //$news = $newsRepository->findOneBy(['keywords' => $news_hash]);
 
             if ($newsRepository->count(['keywords' => $news_hash])) {
