@@ -13,7 +13,6 @@ use Bakame\TabularData\HtmlTable\Parser;
 use Bakame\TabularData\HtmlTable\Section;
 use Bakame\TabularData\HtmlTable\Table;
 
-use SchachvereinBalingenEv\NuToNews\Domain\Repository\CategoryRepository;
 use TYPO3\CMS\Extbase\Mvc\Controller\CommandController;
 use GeorgRinger\News\Domain\Repository\NewsRepository;
 
@@ -30,7 +29,7 @@ final class NuToNews extends AbstractTask
 	{
 
 
-        $CategoryRepository = GeneralUtility::makeInstance(\SchachvereinBalingenEv\NuToNews\Domain\Repository\CategoryRepository::class);
+        $CategoryRepository = GeneralUtility::makeInstance(\GeorgRinger\News\Domain\Repository\CategoryRepository::class);
         $persistenceManager = GeneralUtility::makeInstance(\TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager::class);
         $newsRepository = GeneralUtility::makeInstance(\GeorgRinger\News\Domain\Repository\NewsRepository::class);
 
@@ -124,7 +123,7 @@ final class NuToNews extends AbstractTask
             if ($CategoryRepository->count(['title' => $categorie_name])) {
                 $category = $CategoryRepository->findOneBy(['title' => $categorie_name]);
             } else {
-                $category = new \SchachvereinBalingenEv\NuToNews\Domain\Model\Category;
+                $category = new \GeorgRinger\News\Domain\Model\Category;
                 $category->setTitle($categorie_name);
                 $category->setPid(self::CATEGORY_PID);
                 $category->setParent($CategoryRepository->findByUid(self::CATEGORY_PARENT));
