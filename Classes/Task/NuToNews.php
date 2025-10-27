@@ -92,7 +92,7 @@ final class NuToNews extends AbstractTask
                     }
                 }
 
-                if (($item_index == 0) || ($item_index == 1) || ($item_index == 2)) {
+                if (($item_index == 0) || ($item_index == 1) || ($item_index == 2) || ($item_index == 5)) {
                     $temp_item[$item_index] = $item_item;
                 }
             }
@@ -141,6 +141,7 @@ final class NuToNews extends AbstractTask
 
             $news_hash = md5("$item[1] - $item[4] - $item[5]  - $item[6] - $item[7] - $item[8]");
             $news_title = "$item[7] - $item[8] = $item[9]";
+            $news_timestamp = strototime("$item[1] $item[2]");
             //SF Dornstetten-Pfalzgrafenweiler 4 - SV Balingen 7 = 3,5:2,5
             //$news = $newsRepository->findOneBy(['keywords' => $news_hash]);
 
@@ -148,6 +149,7 @@ final class NuToNews extends AbstractTask
                 $news = $newsRepository->findOneBy(['keywords' => $news_hash]);
                 $news->setTitle($news_title);
                 $news->setHidden(false);
+                $news->setDatetime($news_timestamp);
                 echo "read";
             } else {
                 $news = new \GeorgRinger\News\Domain\Model\NewsDefault;
@@ -162,6 +164,8 @@ final class NuToNews extends AbstractTask
                 $news->setAuthor('svw.info');
                 $news->setAuthorEmail('webmaster@svbalingen.de');
                 $news->addCategory($category);
+                $news->setDatetime($news_timestamp);
+                $news->setStarttime($news_timestamp-259200);
                 echo "write";
             }
 
