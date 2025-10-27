@@ -114,10 +114,10 @@ final class NuToNews extends AbstractTask
             //*********************************
             // Categorie erstellen, finden
             //*********************************
-            if (str_contains($item[7],'Balingen')) {
+            if (@str_contains($item[7],'Balingen')) {
                 $categorie_name .= $item[7];
             }
-            if (str_contains($item[8],'Balingen')) {
+            if (@str_contains($item[8],'Balingen')) {
                 $categorie_name .= $item[8];
             }
             $categorie_name .= ' - ' . $item[6];
