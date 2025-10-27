@@ -157,8 +157,8 @@ final class NuToNews extends AbstractTask
                 $news->setTitle($news_title);
                 $news->setHidden(false);
                 $news->setAuthor('svw.info');
-                //$news->setEmail('webmaster@svbalingen.de');
-                //$news->SetCategory($category);
+                $news->setAuthorEmail('webmaster@svbalingen.de');
+                $news->setCategory($category);
                 echo "write";
             }
 
