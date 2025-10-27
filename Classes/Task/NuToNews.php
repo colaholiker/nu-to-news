@@ -148,7 +148,6 @@ final class NuToNews extends AbstractTask
                 echo "write";
             }
 
-            $news = $newsRepository->findAll();
 
             \TYPO3\CMS\Core\Utility\DebugUtility::debug($news, $news_hash);
 
