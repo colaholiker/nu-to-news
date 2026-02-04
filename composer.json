@@ -11,7 +11,8 @@
 		"bakame/html-table": "dev-main|dev-master"
 	},
 	"require-dev": {
-		"helmich/typo3-typoscript-lint": "@dev"
+		"helmich/typo3-typoscript-lint": "@dev",
+		"friendsofphp/php-cs-fixer": "@dev"
 	},
 	"autoload": {
 		"psr-4": {
