@@ -1,0 +1,22 @@
+paths:
+  - ./
+filePatterns:
+  - "*.tsconfig"
+  - "*.typoscript"
+excludePatterns:
+  - "LuxLetter.typoscript"
+sniffs:
+  - class: Indentation
+    parameters:
+      useSpaces: true
+      indentPerLevel: 2
+      indentConditions: false
+  - class: DeadCode
+    disabled: true
+  - class: OperatorWhitespace
+  - class: RepeatingRValue
+    disabled: true
+  - class: EmptySection
+  - class: NestingConsistency
+    parameters:
+      commonPathPrefixThreshold: 1
