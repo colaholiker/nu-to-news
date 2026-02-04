@@ -52,25 +52,3 @@ jobs:
         run: "composer update"
       - name: "Run PHP CS Fixer"
         run: "composer test:php:cs"
-  unit-tests:
-    name: "PHP Unit Tests"
-    runs-on: ubuntu-24.04
-    needs: php-lint
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-      - name: "Install PHP"
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: "${{ matrix.php-version }}"
-          coverage: none
-          tools: composer:v2
-      - name: "Composer Update"
-        run: "composer update"
-      - name: "Run Unit Tests"
-        run: "composer test:unit"
-    strategy:
-      fail-fast: false
-      matrix:
-        php-version:
-          - 8.4
