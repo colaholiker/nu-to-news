@@ -6,6 +6,7 @@ $EM_CONF[$_EXTKEY] = [
     'constraints' => [
         'depends' => [
             'typo3' => '13.4.0-14.4.99',
+            'scheduler' => '13.4.0-14.4.99',
             'news' => '12.2.0-14.99.99',
         ],
     ],
