@@ -134,6 +134,10 @@ final class NuToNews extends AbstractTask
             $news_timestamp = strtotime("$item[1] $item[2]");
             //SF Dornstetten-Pfalzgrafenweiler 4 - SV Balingen 7 = 3,5:2,5
 
+            var_dump($item);
+            var_dump($news_timestamp);
+            die();
+
             if ($newsRepository->count(['keywords' => $news_hash])) {
                 $news = $newsRepository->findOneBy(['keywords' => $news_hash]);
                 $news->setTitle($news_title);
