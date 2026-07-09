@@ -167,7 +167,6 @@ final class NuToNews extends AbstractTask
 
                 var_dump($item);
                 var_dump($news_timestamp);
-                var_dump($news);
                 die();
 
 
