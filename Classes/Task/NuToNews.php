@@ -6,8 +6,15 @@ namespace SchachvereinBalingenEv\NuToNews\Task;
 
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Scheduler\Task\AbstractTask;
+use TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager;
+use TYPO3\CMS\Extbase\Object\ObjectManager;
 
 use Bakame\TabularData\HtmlTable\Parser;
+use Bakame\TabularData\HtmlTable\Section;
+use Bakame\TabularData\HtmlTable\Table;
+
+use TYPO3\CMS\Extbase\Mvc\Controller\CommandController;
+use GeorgRinger\News\Domain\Repository\NewsRepository;
 
 final class NuToNews extends AbstractTask
 {
@@ -35,6 +42,8 @@ final class NuToNews extends AbstractTask
 		$url = 'https://svw-schach.liga.nu/cgi-bin/WebObjects/nuLigaSCHACHDE.woa/wa/clubMeetings?club=12004';
 		$data = ['searchType' => '1', 'searchTimeRangeFrom' => '01.01.2000', 'searchTimeRangeTo' => date('d.m.Y', time()+2592000), 'selectedTeamId' => 'WONoSelectionString', 'club' => '12004', 'searchMeetings' => 'Suchen'];
 
+        echo "<pre>";
+
         // use key 'http' even if you send the request to https://...
 		$options = [
 			'http' => [
@@ -48,12 +57,13 @@ final class NuToNews extends AbstractTask
 		$result = file_get_contents($url, false, $context);
 
 		if ($result === false) {
-			// Abruf der NuLiga-Seite fehlgeschlagen -> Task als fehlgeschlagen melden
-			return false;
+			/* Handle error */
 		}
 
+		#var_dump($result);
+
 		$formatter = fn (array $record): array => array_map( function($item) {
-			$item = trim($item);
+			$item = mb_trim($item);
 			return $item;
 		}, $record );
 
@@ -133,6 +143,12 @@ final class NuToNews extends AbstractTask
             $news_title = "$item[7] - $item[8] = $item[9]";
             $news_timestamp = strtotime("$item[1] $item[2]");
             //SF Dornstetten-Pfalzgrafenweiler 4 - SV Balingen 7 = 3,5:2,5
+            //$news = $newsRepository->findOneBy(['keywords' => $news_hash]);
+
+            var_dump("$item[1] - $item[4] - $item[5]  - $item[6] - $item[7] - $item[8]");
+            var_dump($news_hash);
+            var_dump($newsRepository->count(['keywords' => $news_hash]));
+            \TYPO3\CMS\Core\Utility\DebugUtility::debug($newsRepository->findOneBy(['keywords' => $news_hash]));
 
             if ($newsRepository->count(['keywords' => $news_hash])) {
                 $news = $newsRepository->findOneBy(['keywords' => $news_hash]);
@@ -144,6 +160,7 @@ final class NuToNews extends AbstractTask
 
                 $newsRepository->update($news);
                 $persistenceManager->persistAll();
+                echo "read";
             } else {
                 $news = new \GeorgRinger\News\Domain\Model\NewsDefault;
                 $news->setPid(self::NEWS_PID);
@@ -163,12 +180,24 @@ final class NuToNews extends AbstractTask
 
                 $newsRepository->add($news);
                 $persistenceManager->persistAll();
+                echo "write";
             }
+
+
+
+
+            \TYPO3\CMS\Core\Utility\DebugUtility::debug($news, $news_hash);
+
 
             unset($news);
             unset($category);
             unset($category_name);
         }
+
+        \TYPO3\CMS\Core\Utility\DebugUtility::debug($tableData, 'blub');
+
+        echo "</pre>";
+
 
         return true;
 	}
