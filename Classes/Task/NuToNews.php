@@ -165,9 +165,10 @@ final class NuToNews extends AbstractTask
                 $newsRepository->add($news);
                 $persistenceManager->persistAll();
 
-                var_dump($item);
-                var_dump($news_timestamp);
-                die();
+                //var_dump($item);
+                //var_dump($news_timestamp);
+                //var_dump($news_hash);
+                //die();
 
 
             }
