@@ -22,7 +22,7 @@ final class NuToNews extends AbstractTask
 	{
 
 
-        $CategoryRepository = GeneralUtility::makeInstance(\GeorgRinger\News\Domain\Repository\CategoryRepository::class);
+        $categoryRepository = GeneralUtility::makeInstance(\GeorgRinger\News\Domain\Repository\CategoryRepository::class);
         $persistenceManager = GeneralUtility::makeInstance(\TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager::class);
         $newsRepository = GeneralUtility::makeInstance(\GeorgRinger\News\Domain\Repository\NewsRepository::class);
 
@@ -41,6 +41,8 @@ final class NuToNews extends AbstractTask
 				'header' => "Content-type: application/x-www-form-urlencoded\r\n",
 				'method' => 'POST',
 				'content' => http_build_query($data),
+				// Ohne Timeout haengt der Scheduler bis zum PHP-Limit, falls nuLiga nicht antwortet.
+				'timeout' => 30,
 			],
 		];
 
@@ -95,89 +97,128 @@ final class NuToNews extends AbstractTask
         unset($item);
 
 
-        foreach ($tableData as $index => $item) {
-            if ($item[0] == 'Tag Datum Zeit') {
+        // Kategorien je Lauf zwischenspeichern: sonst wird pro Zeile erneut
+        // abgefragt und eine noch nicht geschriebene Kategorie doppelt angelegt.
+        $categoryCache = [];
+
+        foreach ($tableData as $item) {
+            if (count($item) < 10) {
                 continue;
             }
 
-            if ($item[0] == 'Tag' && $item[1] == 'Datum' && $item[2] == 'Zeit') {
+            // Kopf- und Zwischenzeilen brauchen keine gesonderte Textpruefung:
+            // nur echte Paarungen haben ein parsebares Datum.
+            // Das fuehrende "!" setzt die Sekunden auf 0, sonst wandert der
+            // Zeitstempel bei jedem Lauf um die aktuelle Sekundenzahl.
+            $meetingDate = \DateTimeImmutable::createFromFormat('!d.m.Y H:i', "$item[1] $item[2]");
+            if ($meetingDate === false) {
                 continue;
             }
 
-            //erstellen prüfen Categorien
-            $categorie_name = '';
-            $categorie_name .= 'nu - ';
+            // Die Saison steht nirgends in der Tabelle, wird aber gebraucht, damit
+            // der Schluessel ueber Saisongrenzen hinweg eindeutig bleibt.
+            // Spieljahr laeuft Herbst -> Fruehjahr.
+            $year = (int)$meetingDate->format('Y');
+            $season = (int)$meetingDate->format('n') >= 7
+                ? sprintf('%d/%d', $year, $year + 1)
+                : sprintf('%d/%d', $year - 1, $year);
 
             //*********************************
             // Categorie erstellen, finden
             //*********************************
-            if (str_contains($item[7],'Balingen')) {
-                $categorie_name .= $item[7];
-            }
-            if (str_contains($item[8],'Balingen')) {
-                $categorie_name .= $item[8];
-            }
-            $categorie_name .= ' - ' . $item[6];
+            // Bei Vereinsderbys stehen beide Mannschaften in der Zeile.
+            $ownTeams = array_values(array_filter(
+                [$item[7], $item[8]],
+                static fn (string $team): bool => str_contains($team, 'Balingen')
+            ));
 
+            if ($ownTeams === []) {
+                // Keine eigene Mannschaft beteiligt -> keine Kategorie, keine News.
+                continue;
+            }
 
-            if ($CategoryRepository->count(['title' => $categorie_name])) {
-                $category = $CategoryRepository->findOneBy(['title' => $categorie_name]);
+            $categoryName = 'nu - ' . implode(' / ', $ownTeams) . ' - ' . $item[6];
+
+            if (isset($categoryCache[$categoryName])) {
+                $category = $categoryCache[$categoryName];
             } else {
-                $category = new \GeorgRinger\News\Domain\Model\Category;
-                $category->setTitle($categorie_name);
-                $category->setPid(self::CATEGORY_PID);
-                $category->setParentcategory($CategoryRepository->findByUid(self::CATEGORY_PARENT));
+                $category = $categoryRepository->findOneBy(['title' => $categoryName]);
 
-                $CategoryRepository->add($category);
-                $persistenceManager->persistAll();
+                if ($category === null) {
+                    $category = new \GeorgRinger\News\Domain\Model\Category();
+                    $category->setTitle($categoryName);
+                    $category->setPid(self::CATEGORY_PID);
+                    $category->setParentcategory($categoryRepository->findByUid(self::CATEGORY_PARENT));
+
+                    $categoryRepository->add($category);
+                    // Sofort schreiben, damit die Kategorie eine UID hat, bevor
+                    // sie an eine News gehaengt wird. Passiert nur beim ersten Mal.
+                    $persistenceManager->persistAll();
+                }
+
+                $categoryCache[$categoryName] = $category;
             }
 
             //*********************
             //News Erstellen
             //*********************
 
-            $news_hash = md5("$item[1] - $item[4] - $item[5]  - $item[6] - $item[7] - $item[8]");
-            $news_title = "$item[7] - $item[8] = $item[9]";
-            $news_timestamp = strtotime("$item[1] $item[2]");
+            // Bewusst ohne Datum: wird eine Partie verlegt, soll die bestehende
+            // News aktualisiert und keine zweite angelegt werden.
+            $newsHash = md5($season . ' - ' . $item[6] . ' - ' . $item[4] . ' - ' . $item[7] . ' - ' . $item[8]);
+            // Alter, datumsabhaengiger Schluessel. Nur noch fuer die einmalige
+            // Migration bestehender Datensaetze - kann nach einem vollstaendigen
+            // Lauf samt zweitem findOneBy() entfernt werden.
+            $legacyHash = md5("$item[1] - $item[4] - $item[5]  - $item[6] - $item[7] - $item[8]");
+
+            $newsTitle = "$item[7] - $item[8] = $item[9]";
             //SF Dornstetten-Pfalzgrafenweiler 4 - SV Balingen 7 = 3,5:2,5
+            $newsTimestamp = $meetingDate->getTimestamp();
+            $startTimestamp = $meetingDate->modify('-3 days')->getTimestamp();
 
+            $news = $newsRepository->findOneBy(['keywords' => $newsHash])
+                ?? $newsRepository->findOneBy(['keywords' => $legacyHash]);
 
-            if ($newsRepository->count(['keywords' => $news_hash])) {
-                $news = $newsRepository->findOneBy(['keywords' => $news_hash]);
-                $news->setTitle($news_title);
+            if ($news !== null) {
+                // Migration: Datensatz auf den neuen Schluessel umschreiben.
+                // pathSegment bleibt unangetastet, damit bestehende URLs gueltig bleiben.
+                $news->setKeywords($newsHash);
+                $news->setTitle($newsTitle);
                 $news->setHidden(false);
                 $news->setDeleted(false);
-                $news->setDatetime($news_timestamp);
-                $news->setStarttime($news_timestamp-259200);
+                $news->setDatetime($newsTimestamp);
+                $news->setStarttime($startTimestamp);
+
+                if (!$news->getCategories()->contains($category)) {
+                    $news->addCategory($category);
+                }
 
                 $newsRepository->update($news);
-                $persistenceManager->persistAll();
             } else {
-                $news = new \GeorgRinger\News\Domain\Model\NewsDefault;
+                $news = new \GeorgRinger\News\Domain\Model\NewsDefault();
                 $news->setPid(self::NEWS_PID);
                 $news->setTstamp(time());
                 $news->setCrdate(time());
-                $news->setKeywords($news_hash);
-                $news->setPathSegment($news_hash);
-                $news->setBodytext('Es wurde noch kein Spielberricht hinterlegt.');
-                $news->setTitle($news_title);
+                $news->setKeywords($newsHash);
+                $news->setPathSegment($newsHash);
+                $news->setBodytext('Es wurde noch kein Spielbericht hinterlegt.');
+                $news->setTitle($newsTitle);
                 $news->setHidden(false);
                 $news->setDeleted(false);
                 $news->setAuthor('svw.info');
                 $news->setAuthorEmail('webmaster@svbalingen.de');
                 $news->addCategory($category);
-                $news->setDatetime($news_timestamp);
-                $news->setStarttime($news_timestamp-259200);
+                $news->setDatetime($newsTimestamp);
+                $news->setStarttime($startTimestamp);
 
                 $newsRepository->add($news);
-                $persistenceManager->persistAll();
-
             }
 
-            unset($news);
-            unset($category);
-            unset($category_name);
+            unset($news, $category);
         }
+
+        // Einmal am Ende schreiben statt einmal pro Zeile.
+        $persistenceManager->persistAll();
 
         return true;
 	}
