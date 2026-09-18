@@ -95,8 +95,6 @@ final class NuToNews extends AbstractTask
             var_dump($item);
             var_dump($temp_item);
             echo "</pre><hr>";
-
-
         }
         unset($item);
 
