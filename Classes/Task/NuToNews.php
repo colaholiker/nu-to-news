@@ -70,8 +70,6 @@ final class NuToNews extends AbstractTask
 
         $tableData = json_decode(json_encode($tableData));
 
-        var_dump($tableData);
-
 		foreach ($tableData as $index => &$item) {
 
             if ($index != 0) {
@@ -93,12 +91,6 @@ final class NuToNews extends AbstractTask
                 }
             }
             unset($item_item);
-
-
-            echo "cola<pre>";
-            var_dump($item);
-            var_dump($temp_item);
-            echo "</pre><hr>";
         }
         unset($item);
 
@@ -158,8 +150,8 @@ final class NuToNews extends AbstractTask
                 $news->setDatetime($news_timestamp);
                 $news->setStarttime($news_timestamp-259200);
 
-                //$newsRepository->update($news);
-                //$persistenceManager->persistAll();
+                $newsRepository->update($news);
+                $persistenceManager->persistAll();
             } else {
                 $news = new \GeorgRinger\News\Domain\Model\NewsDefault;
                 $news->setPid(self::NEWS_PID);
@@ -177,8 +169,8 @@ final class NuToNews extends AbstractTask
                 $news->setDatetime($news_timestamp);
                 $news->setStarttime($news_timestamp-259200);
 
-                //$newsRepository->add($news);
-                //$persistenceManager->persistAll();
+                $newsRepository->add($news);
+                $persistenceManager->persistAll();
 
             }
 
