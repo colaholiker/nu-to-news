@@ -10,7 +10,7 @@
         "typo3/cms-core": "^13.4 || ^14",
         "typo3/cms-scheduler": "^13.4 || ^14",
         "georgringer/news": "^12.2 || ^13 || ^14",
-        "bakame/html-table": "dev-main|dev-master"
+        "bakame/html-table": "dev-main || dev-master"
     },
     "autoload": {
         "psr-4": {

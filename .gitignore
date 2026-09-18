@@ -41,6 +41,7 @@ dynamicReturnTypeMeta.json
 Resources/Private/Build/node_modules/
 node_modules/
 .Build/
+/vendor/
 composer.lock
 package-lock.json
 .php_cs.cache
