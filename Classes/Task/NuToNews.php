@@ -53,7 +53,11 @@ final class NuToNews extends AbstractTask
 		}
 
 		$formatter = fn (array $record): array => array_map( function($item) {
-			$item = trim($item);
+			// nuLiga liefert &nbsp; (U+00A0) in leeren bzw. aufgefuellten Zellen.
+			// trim() entfernt nur ASCII-Whitespace, daher vorher dekodieren und
+			// alle Unicode-Leerzeichen an den Raendern abschneiden.
+			$item = html_entity_decode((string)$item, ENT_QUOTES | ENT_HTML5, 'UTF-8');
+			$item = preg_replace('/^[\s\p{Z}]+|[\s\p{Z}]+$/u', '', $item) ?? trim($item);
 			return $item;
 		}, $record );
 
@@ -101,6 +105,10 @@ final class NuToNews extends AbstractTask
 
         foreach ($tableData as $index => $item) {
             if ($item[0] == 'Tag Datum Zeit') {
+                continue;
+            }
+
+            if ($item[0] == 'Tag' && $item[1] == 'Datum' && $item[2] == 'Zeit') {
                 continue;
             }
 
