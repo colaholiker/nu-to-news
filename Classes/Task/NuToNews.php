@@ -55,6 +55,11 @@ final class NuToNews extends AbstractTask
 
         $querySettings = $newsRepository->createQuery()->getQuerySettings();
         $querySettings->setStoragePageIds([self::NEWS_PID]);
+        // Auch versteckte, geloeschte und noch nicht gestartete News finden:
+        // die Starttime liegt bei kuenftigen Paarungen in der Zukunft, ohne
+        // diese Einstellungen wuerde bei jedem Lauf eine neue News angelegt.
+        $querySettings->setIgnoreEnableFields(true);
+        $querySettings->setIncludeDeleted(true);
         //$querySettings->setRecursive(99);
 
         $newsRepository->setDefaultQuerySettings($querySettings);
